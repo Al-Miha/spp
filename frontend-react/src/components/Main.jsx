@@ -16,7 +16,11 @@ const Main = () => {
             laboriosam autem optio placeat. Labore praesentium sunt a incidunt,
             maxime laudantium! Sapiente, eum voluptate.
           </p>
-          <Button text="Login" styling="btn-outline-info" />
+          <Button
+            text="Explore Now"
+            styling="btn-outline-info"
+            url="/dashboard"
+          />
         </div>
       </div>
     </>
