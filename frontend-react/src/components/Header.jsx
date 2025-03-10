@@ -1,7 +1,11 @@
 import Button from "./Button";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../AuthProvider";
+import { useContext } from "react";
 
 const Header = () => {
+  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+
   return (
     <>
       <nav className="navbar container pt-3 pb-3 align-items-start">
@@ -10,9 +14,15 @@ const Header = () => {
         </Link>
 
         <div>
-          <Button text="Login" styling="btn-outline-info" url="/login" />
-          &nbsp; &nbsp;
-          <Button text="Register" styling="btn-info" url="/register" />
+          {isLoggedIn ? (
+            <button className="btn btn-danger">Logout</button>
+          ) : (
+            <>
+              <Button text="Login" styling="btn-outline-info" url="/login" />
+              &nbsp; &nbsp;
+              <Button text="Register" styling="btn-info" url="/register" />
+            </>
+          )}
         </div>
       </nav>
     </>
