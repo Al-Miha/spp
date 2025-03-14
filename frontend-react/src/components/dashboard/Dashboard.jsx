@@ -8,6 +8,7 @@ const Dashboard = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [plot, setPlot] = useState();
+  const [ma100, setMa100] = useState();
   // const accessToken = localStorage.getItem("accessToken");
   useEffect(() => {
     const fetchProtectedData = async () => {
@@ -31,8 +32,10 @@ const Dashboard = () => {
       console.log(response.data);
       const backendRoot = import.meta.env.VITE_BACKEND_ROOT;
       const plotUrl = `${backendRoot}${response.data.plot_img}`;
+      const ma100Url = `${backendRoot}${response.data.plot_100_dma}`;
       // console.log(plotUrl);
       setPlot(plotUrl);
+      setMa100(ma100Url);
       // Set plots
       if (response.data.error) {
         setError(response.data.error);
@@ -74,6 +77,9 @@ const Dashboard = () => {
         <div className="prediction mt-5">
           <div className="p-3">
             {plot && <img src={plot} style={{ maxWidth: "100%" }} />}
+          </div>
+          <div className="p-3">
+            {ma100 && <img src={ma100} style={{ maxWidth: "100%" }} />}
           </div>
         </div>
       </div>
