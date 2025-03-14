@@ -22,6 +22,7 @@ class StockPredictionAPIView(APIView):
             start=datetime(now.year-10,now.month,now.day)
             end=now
             df=yf.download(ticker,start,end)
+            print(df)
             if df.empty:
                 return Response({'error':'No data found for the given ticker','status':status.HTTP_404_NOT_FOUND})
             
