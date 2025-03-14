@@ -8,6 +8,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
+import os
+from django.conf import settings
 
 # Create your views here.
 
@@ -25,5 +27,27 @@ class StockPredictionAPIView(APIView):
             print(df)
             if df.empty:
                 return Response({'error':'No data found for the given ticker','status':status.HTTP_404_NOT_FOUND})
+            
+            # Flatten the MultiIndex and remove the ticker (second level)
+            df.columns = df.columns.get_level_values(0)  # Get only the first level (Price type)
+            # Remove the column name (Price)
+            df.columns.name = None
+            df=df.reset_index()
+
+            # Generate basic plot
+            plt.switch_backend('AGG')
+            plt.figure(figsize=(12,5))
+            plt.plot(df.Date,df.Close, label='Closing Price')
+            plt.title(f"Closing price of {ticker}")
+            plt.xlabel('Date')
+            plt.ylabel('Close price')
+            plt.legend()
+            # Save the plot to a file
+            plot_img_path = f'{ticker}_plot.png'
+            image_path=os.path.join(settings.MEDIA_ROOT,plot_img_path)
+            plt.savefig(image_path)
+            plt.close()
+            image_url=settings.MEDIA_URL + plot_img_path
+            print(image_url)
             
             return Response({'status':'success', 'ticker':ticker})
