@@ -10,6 +10,10 @@ const Dashboard = () => {
   const [plot, setPlot] = useState();
   const [ma100, setMa100] = useState();
   const [ma200, setMa200] = useState();
+  const [prediction, setPrediction] = useState();
+  const [mse, setMSE] = useState();
+  const [rmse, setRMSE] = useState();
+  const [r2, setR2] = useState();
   // const accessToken = localStorage.getItem("accessToken");
   useEffect(() => {
     const fetchProtectedData = async () => {
@@ -35,10 +39,15 @@ const Dashboard = () => {
       const plotUrl = `${backendRoot}${response.data.plot_img}`;
       const ma100Url = `${backendRoot}${response.data.plot_100_dma}`;
       const ma200Url = `${backendRoot}${response.data.plot_200_dma}`;
+      const predictionUrl = `${backendRoot}${response.data.plot_prediction}`;
       // console.log(plotUrl);
       setPlot(plotUrl);
       setMa100(ma100Url);
       setMa200(ma200Url);
+      setPrediction(predictionUrl);
+      setMSE(response.data.mse);
+      setRMSE(response.data.rmse);
+      setR2(response.data.r2);
       // Set plots
       if (response.data.error) {
         setError(response.data.error);
@@ -77,17 +86,30 @@ const Dashboard = () => {
           </form>
         </div>
         {/* Print prediction plots */}
-        <div className="prediction mt-5">
-          <div className="p-3">
-            {plot && <img src={plot} style={{ maxWidth: "100%" }} />}
+        {prediction && (
+          <div className="prediction mt-5">
+            <div className="p-3">
+              {plot && <img src={plot} style={{ maxWidth: "100%" }} />}
+            </div>
+            <div className="p-3">
+              {ma100 && <img src={ma100} style={{ maxWidth: "100%" }} />}
+            </div>
+            <div className="p-3">
+              {ma200 && <img src={ma200} style={{ maxWidth: "100%" }} />}
+            </div>
+            <div className="p-3">
+              {prediction && (
+                <img src={prediction} style={{ maxWidth: "100%" }} />
+              )}
+            </div>
+            <div className="text-light p-3">
+              <h4>Model Evaluation</h4>
+              <p>Mean Squared Error (MSE): {mse}</p>
+              <p>Root Mean Squared Error (MSE): {rmse}</p>
+              <p>R-Squared (MSE): {r2}</p>
+            </div>
           </div>
-          <div className="p-3">
-            {ma100 && <img src={ma100} style={{ maxWidth: "100%" }} />}
-          </div>
-          <div className="p-3">
-            {ma200 && <img src={ma200} style={{ maxWidth: "100%" }} />}
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
